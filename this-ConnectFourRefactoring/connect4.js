@@ -5,16 +5,30 @@
 *   - Move the current functions onto the class as methods
 *
 * Part Two: Small Improvements
-* Make it so that you have a button to “start the game” — it should only start the game when this is clicked, and you should be able to click this to restart a new game.
+*   Make it so that you have a button to “start the game” — it should only start the game when this is clicked, and you should be able to click this to restart a new game.
+*   Add a property for when the game is over, and make it so that you can’t continue to make moves after the game has ended.
 *
-* Add a property for when the game is over, and make it so that you can’t continue to make moves after the game has ended.
+* Part Three: Make Player a Class
+*   Right now, the players are just numbers, and we have hard-coded player numbers and colors in the CSS.
+*   Make it so that there is a Player class. It should have a constructor that takes a string color name (eg, “orange” or “#ff3366”) and store that on the player instance.
+*   The Game should keep track of the current player object, not the current player number.
+*   Update the code so that the player pieces are the right color for them, rather than being hardcoded in CSS as red or blue.
+*   Add a small form to the HTML that lets you enter the colors for the players, so that when you start a new game, it uses these player * colors.
 */
+class Player {
+  constructor(color) {
+    this.color = color;
+  }
+}
+
 class Game {
-  constructor(height, width) {
-    this.height = height;
-    this.width = width;
-    this.currPlayer = 1;
+  constructor(player_1, player_2) {
+    this.height = 6;
+    this.width = 7;
     this.board = [];
+    this.currPlayer = player_1;
+    this.player_1 = player_1;
+    this.player_2 = player_2;
     this.gameOver = false;
     this.makeBoard();
     this.makeHtmlBoard();
@@ -68,7 +82,7 @@ class Game {
   placeInTable(y, x) {
     const piece = document.createElement('div');
     piece.classList.add('piece');
-    piece.classList.add(`p${this.currPlayer}`);
+    piece.style.backgroundColor = this.currPlayer.color;
     piece.style.top = -50 * (y + 2);
 
     const spot = document.getElementById(`${y}-${x}`);
@@ -101,7 +115,7 @@ class Game {
     
     // check for win
     if(this.checkForWin()) {
-      return this.endGame(`Player ${this.currPlayer} won!`);
+      return this.endGame(`Player ${this.currPlayer.color} won!`);
     }
     
     // check for tie
@@ -110,7 +124,7 @@ class Game {
     }
       
     // switch players
-    this.currPlayer = this.currPlayer === 1 ? 2 : 1;
+    this.currPlayer = this.currPlayer === this.player_1 ? this.player_2 : this.player_1;
   }
 
   checkForWin() {
@@ -150,6 +164,9 @@ class Game {
 // Assuming constructor takes height, width
 const startGameButton = document.getElementById('startGame');
 startGameButton.addEventListener('click', function(){
-  new Game(6, 7); 
-  startGameButton.innerText = 'Restart Game!';
+  // Color values for players
+  let player_1 = new Player(document.getElementById('player-1-color').value);
+  let player_2 = new Player(document.getElementById('player-2-color').value);
+  // Start new game
+  new Game(player_1, player_2);
 });
