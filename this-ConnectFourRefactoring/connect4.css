@@ -13,7 +13,21 @@
   width: 80%;
   height: 80%;
   border-radius: 50%;
+  position: relative;
+  animation-duration: 1s;
+  animation-name: downPiece;
 }
+@keyframes downPiece{
+  from{
+    visibility: hidden;
+    top: -150px;
+  }
+  to{
+    visibility: visible;
+    top: 0px;
+  }
+}
+
 
 /* column-top is table row of clickable areas for each column */
 
