@@ -3,6 +3,11 @@
 *   - Height, width, and the board will move from global variables to instance attributes on the class
 *   - Make a constructor that sets default values for these
 *   - Move the current functions onto the class as methods
+*
+* Part Two: Small Improvements
+* Make it so that you have a button to “start the game” — it should only start the game when this is clicked, and you should be able to click this to restart a new game.
+*
+* Add a property for when the game is over, and make it so that you can’t continue to make moves after the game has ended.
 */
 class Game {
   constructor(height, width) {
@@ -10,6 +15,7 @@ class Game {
     this.width = width;
     this.currPlayer = 1;
     this.board = [];
+    this.gameOver = false;
     this.makeBoard();
     this.makeHtmlBoard();
   }
@@ -22,6 +28,7 @@ class Game {
 
   makeHtmlBoard() {
     const board = document.getElementById('board');
+    board.innerHTML = '';
 
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr');
@@ -69,6 +76,12 @@ class Game {
   }
 
   endGame(msg) {
+    // Change the value of gameOver to TRUE
+    this.gameOver = true;
+    // Remove the EventListener to column top board
+    const columnTopBoard = document.querySelector("#column-top");
+    columnTopBoard.removeEventListener("click", this.gameHandleClick);
+    // Show msn with the winner player
     alert(msg);
   }
 
@@ -135,4 +148,8 @@ class Game {
 
 // The only other code being a single line at the bottom:
 // Assuming constructor takes height, width
-new Game(6, 7);   
+const startGameButton = document.getElementById('startGame');
+startGameButton.addEventListener('click', function(){
+  new Game(6, 7); 
+  startGameButton.innerText = 'Restart Game!';
+});
